@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="g1" cx="78%" cy="22%" r="55%">
+      <stop offset="0%" stop-color="#9B6DFF" stop-opacity=".55"/>
+      <stop offset="60%" stop-color="#9B6DFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="14%" cy="82%" r="55%">
+      <stop offset="0%" stop-color="#D4FF32" stop-opacity=".18"/>
+      <stop offset="60%" stop-color="#D4FF32" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A0A0E"/>
+      <stop offset="100%" stop-color="#08080A"/>
+    </linearGradient>
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="20%" stop-color="#E8E0FF"/>
+      <stop offset="48%" stop-color="#9B6DFF"/>
+      <stop offset="76%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#B18CFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#F5F2EB">
+    <g transform="translate(80, 110)">
+      <rect width="78" height="78" rx="39" fill="#9B6DFF"/>
+      <text x="50%" y="56%" text-anchor="middle" font-size="30" font-weight="900" fill="#fff" dominant-baseline="middle">EQ</text>
+    </g>
+    <text x="80" y="252" font-size="26" font-weight="500" fill="#9A9AA0" letter-spacing="6">ELoquncy / product developer · ДОСТУПЕН</text>
+    <text x="80" y="380" font-size="92" font-weight="800" letter-spacing="-4">Сайты · боты ·</text>
+    <text x="80" y="478" font-size="92" font-weight="800" letter-spacing="-4" fill="url(#chrome)">автоматизация</text>
+    <text x="80" y="558" font-size="26" font-weight="500" fill="#B8B8BF">Один разработчик — весь запуск. ~7 дней до MVP.</text>
+  </g>
+</svg>
