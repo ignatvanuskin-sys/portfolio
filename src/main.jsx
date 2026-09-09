@@ -337,11 +337,12 @@ function FAQ() {
   return <section className="faq-section section-dark"><div className="section-label">06 / FAQ</div><div className="faq-heading"><h2>Коротко<br /><em>об условиях.</em></h2><p>Если вопроса нет в списке — напишите напрямую в Telegram.</p></div><div className="faq-list">{items.map(([question, answer]) => <details key={question}><summary {...HoverProps()}>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
 }
 
-function Contacts() {
-  return <section className="contact-section section-dark" id="contact"><div className="section-label">07 / КОНТАКТЫ</div><div className="contact-heading"><h2>Есть задача?<br /><em>Давайте обсудим.</em></h2><p>Напишите, что нужно запустить. Отвечу с планом, сроком и оценкой в тот же день.</p></div><div className="contacts-list"><a className="contact-row" href={TELEGRAM_URL} target="_blank" rel="noreferrer" {...HoverProps()}><span className="contact-name">Telegram</span><span className="contact-value">@EloQuncy</span><Arrow /></a><a className="contact-row contact-primary" href={TELEGRAM_URL} target="_blank" rel="noreferrer" {...HoverProps()}><span className="contact-name">Начать проект</span><span className="contact-value">Написать в Telegram</span><Arrow /></a></div></section>
+function Contacts({ onOrder }) {
+  return <section className="contact-section section-dark" id="contact"><div className="section-label">07 / КОНТАКТЫ</div><div className="contact-heading"><h2>Есть задача?<br /><em>Давайте обсудим.</em></h2><p>Заполните короткую форму — я отвечу с планом, сроком и оценкой в Telegram.</p></div><div className="contacts-list"><a className="contact-row" href={TELEGRAM_URL} target="_blank" rel="noreferrer" {...HoverProps()}><span className="contact-name">Telegram</span><span className="contact-value">@EloQuncy</span><Arrow /></a><button className="contact-row contact-primary" type="button" onClick={onOrder} {...HoverProps()}><span className="contact-name">Заказать проект</span><span className="contact-value">Заполнить бриф</span><Arrow /></button></div></section>
 }
 
-function ProjectModal({ item, onClose }) {
+function OrderModal({ onClose }) {
+  const [form, setForm] = useState({ name: '', task: '', contact: '' })
   useEffect(() => {
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -349,11 +350,30 @@ function ProjectModal({ item, onClose }) {
     window.addEventListener('keydown', handler)
     return () => { document.body.style.overflow = previous; window.removeEventListener('keydown', handler) }
   }, [onClose])
-  return <div className="modal-overlay" role="presentation" onMouseDown={onClose}><article className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={onClose} aria-label="Закрыть" {...HoverProps()}>×</button><div className="section-label">{item.type}</div><h2 id="modal-title">{item.title}</h2><div className="modal-grid"><div><small>ЗАДАЧА</small><p>{item.task}</p></div><div><small>ЧТО СДЕЛАНО</small><p>{item.solution}</p></div><div><small>РОЛЬ И СОСТАВ</small><p>{item.role}</p></div><div className="modal-result"><small>РЕЗУЛЬТАТ</small><strong>{item.metric}</strong><p>{item.proof}</p></div></div><div className="modal-actions"><a className="solid-btn" href={item.link} target="_blank" rel="noreferrer" {...HoverProps()}>Открыть проект <Arrow /></a><a className="ghost-btn" href={TELEGRAM_URL} target="_blank" rel="noreferrer" {...HoverProps()}>Заказать похожий</a></div></article></div>
+  const update = event => setForm(value => ({ ...value, [event.target.name]: event.target.value }))
+  const submit = event => {
+    event.preventDefault()
+    const text = [`Заказать проект`, `Название: ${form.name}`, `Задача: ${form.task}`, `Telegram: ${form.contact}`].join('\n')
+    window.open(`${TELEGRAM_URL}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer')
+    onClose()
+  }
+  return <div className="modal-overlay order-overlay" role="presentation" onMouseDown={onClose}><form className="order-modal" onSubmit={submit} onMouseDown={event => event.stopPropagation()}><button className="modal-close" type="button" onClick={onClose} aria-label="Закрыть" {...HoverProps()}>×</button><div className="section-label">START A PROJECT</div><h2>Заказать проект</h2><p className="order-lead">Опишите задачу — свяжусь с вами в Telegram.</p><label>Название проекта<input required name="name" value={form.name} onChange={update} placeholder="Например, Telegram-бот для магазина" /></label><label>Задача<textarea required name="task" value={form.task} onChange={update} placeholder="Что нужно сделать" rows="4" /></label><label>Контакт (Telegram)<input required name="contact" value={form.contact} onChange={update} placeholder="@username" /></label><button className="order-submit" type="submit" {...HoverProps()}>Отправить <Arrow /></button></form></div>
+}
+
+function ProjectModal({ item, onClose, onOrder }) {
+  useEffect(() => {
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const handler = event => event.key === 'Escape' && onClose()
+    window.addEventListener('keydown', handler)
+    return () => { document.body.style.overflow = previous; window.removeEventListener('keydown', handler) }
+  }, [onClose])
+  return <div className="modal-overlay" role="presentation" onMouseDown={onClose}><article className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={onClose} aria-label="Закрыть" {...HoverProps()}>×</button><div className="section-label">{item.type}</div><h2 id="modal-title">{item.title}</h2><div className="modal-grid"><div><small>ЗАДАЧА</small><p>{item.task}</p></div><div><small>ЧТО СДЕЛАНО</small><p>{item.solution}</p></div><div><small>РОЛЬ И СОСТАВ</small><p>{item.role}</p></div><div className="modal-result"><small>РЕЗУЛЬТАТ</small><strong>{item.metric}</strong><p>{item.proof}</p></div></div><div className="modal-actions"><a className="solid-btn" href={item.link} target="_blank" rel="noreferrer" {...HoverProps()}>Открыть проект <Arrow /></a><button className="ghost-btn" type="button" onClick={onOrder} {...HoverProps()}>Заказать проект</button></div></article></div>
 }
 
 function App() {
   const [active, setActive] = useState(null)
+  const [orderOpen, setOrderOpen] = useState(false)
   useEffect(() => {
     const unlock = () => {
       unlockHoverAudio()
@@ -401,11 +421,12 @@ function App() {
       <Process />
       <About />
       <FAQ />
-      <Contacts />
+      <Contacts onOrder={() => setOrderOpen(true)} />
     </main>
     <footer className="site-footer"><span>© {new Date().getFullYear()} EloQuncy · software developer</span><span><b>6+ лет</b> · <b>50+ запусков</b> · отвечаю сегодня</span></footer>
-    <a className="fixed-cta" href="#contact" {...HoverProps()}>Написать в Telegram <Arrow /></a>
-    {active && <ProjectModal item={active} onClose={() => setActive(null)} />}
+    <button className="fixed-cta" type="button" onClick={() => setOrderOpen(true)} {...HoverProps()}>Заказать проект <Arrow /></button>
+    {active && <ProjectModal item={active} onClose={() => setActive(null)} onOrder={() => { setActive(null); setOrderOpen(true) }} />}
+    {orderOpen && <OrderModal onClose={() => setOrderOpen(false)} />}
   </>
 }
 
