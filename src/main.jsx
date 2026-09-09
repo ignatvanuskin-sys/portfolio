@@ -172,14 +172,10 @@ function PageLoader() {
   const [loaded, setLoaded] = useState(false)
   const [progress, setProgress] = useState(0)
   useEffect(() => {
-    const finish = () => window.setTimeout(() => setLoaded(true), 650)
-    if (document.readyState === 'complete') finish()
-    else window.addEventListener('load', finish, { once: true })
     const progressTimer = window.setInterval(() => setProgress(value => Math.min(value + 7, 99)), 36)
-    const fallback = window.setTimeout(() => setLoaded(true), 1800)
+    const finish = window.setTimeout(() => setLoaded(true), 420)
     return () => {
-      window.removeEventListener('load', finish)
-      window.clearTimeout(fallback)
+      window.clearTimeout(finish)
       window.clearInterval(progressTimer)
     }
   }, [])
@@ -220,7 +216,7 @@ function Header() {
   }
   return (
     <header className="site-header">
-      <a className="brand" href="#top" onClick={() => setOpen(false)} aria-label="EloQuncy — на главную">
+      <a className="brand" href="#top" onClick={() => setOpen(false)}>
         <span className="brand-mark">EQ</span>
         <span><b>EloQuncy</b><small>software developer</small></span>
       </a>
