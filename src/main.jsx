@@ -151,18 +151,21 @@ function playHoverSound() {
 
 function PageLoader() {
   const [loaded, setLoaded] = useState(false)
+  const [progress, setProgress] = useState(0)
   useEffect(() => {
     const finish = () => window.setTimeout(() => setLoaded(true), 650)
     if (document.readyState === 'complete') finish()
     else window.addEventListener('load', finish, { once: true })
+    const progressTimer = window.setInterval(() => setProgress(value => Math.min(value + 7, 99)), 36)
     const fallback = window.setTimeout(() => setLoaded(true), 1800)
     return () => {
       window.removeEventListener('load', finish)
       window.clearTimeout(fallback)
+      window.clearInterval(progressTimer)
     }
   }, [])
   return <div className={`page-loader ${loaded ? 'is-loaded' : ''}`} aria-hidden={loaded}>
-    <div className="loader-core"><span>EQ</span><i></i></div>
+    <div className="loader-count">{String(progress).padStart(2, '0')}</div>
     <div className="loader-meta"><span>ELOQUNCY / SOFTWARE DEVELOPER</span><b>loading experience</b></div>
   </div>
 }
@@ -275,7 +278,9 @@ function ProjectCard({ item, index, onOpen }) {
 }
 
 function Projects({ onOpen }) {
-  return <section className="work-section section-dark" id="work"><div className="section-label">02 / ИЗБРАННЫЕ ПРОЕКТЫ</div><div className="work-heading"><h2>Рабочие продукты.<br /><em>Не просто демо.</em></h2><p>Сохранил все проекты и ссылки. Открой кейс, чтобы увидеть задачу, решение и то, что входит в работу.</p></div><div className="work-list">{cases.map((item, index) => <ProjectCard key={item.title} item={item} index={index} onOpen={onOpen} />)}</div></section>
+  const [filter, setFilter] = useState('work')
+  const visibleCases = filter === 'work' ? cases.slice(0, 4) : cases.slice(4)
+  return <section className="work-section section-dark" id="work"><div className="section-label">02 / ИЗБРАННЫЕ ПРОЕКТЫ</div><div className="work-heading"><h2>Рабочие продукты.<br /><em>Не просто демо.</em></h2><p>Сохранил проекты и ссылки. Переключай подборки и открывай каждый кейс, чтобы увидеть задачу, решение и результат.</p></div><div className="work-tabs" role="tablist" aria-label="Фильтр проектов"><button className={filter === 'work' ? 'is-active' : ''} role="tab" aria-selected={filter === 'work'} onClick={() => setFilter('work')} {...HoverProps()}>Рабочие <b>{cases.slice(0, 4).length}</b></button><button className={filter === 'other' ? 'is-active' : ''} role="tab" aria-selected={filter === 'other'} onClick={() => setFilter('other')} {...HoverProps()}>Прочие <b>{cases.slice(4).length}</b></button></div><div className="work-list">{visibleCases.map((item, index) => <ProjectCard key={item.title} item={item} index={index} onOpen={onOpen} />)}</div></section>
 }
 
 function Services() {
