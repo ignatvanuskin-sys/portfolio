@@ -149,6 +149,34 @@ function playHoverSound() {
   oscillator.stop(now + .08)
 }
 
+function PageLoader() {
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    const finish = () => window.setTimeout(() => setLoaded(true), 650)
+    if (document.readyState === 'complete') finish()
+    else window.addEventListener('load', finish, { once: true })
+    const fallback = window.setTimeout(() => setLoaded(true), 1800)
+    return () => {
+      window.removeEventListener('load', finish)
+      window.clearTimeout(fallback)
+    }
+  }, [])
+  return <div className={`page-loader ${loaded ? 'is-loaded' : ''}`} aria-hidden={loaded}>
+    <div className="loader-core"><span>EQ</span><i></i></div>
+    <div className="loader-meta"><span>ELOQUNCY / SOFTWARE DEVELOPER</span><b>loading experience</b></div>
+  </div>
+}
+
+function AmbientScene() {
+  return <div className="ambient-scene" aria-hidden="true">
+    <div className="ambient-grid"></div>
+    <span className="ambient-orb orb-one"></span>
+    <span className="ambient-orb orb-two"></span>
+    <span className="ambient-orb orb-three"></span>
+    <span className="ambient-beam"></span>
+  </div>
+}
+
 function HoverProps() {
   return { onPointerEnter: playHoverSound }
 }
@@ -184,6 +212,7 @@ function Header() {
 function Hero() {
   return (
     <section className="hero" id="top">
+      <AmbientScene />
       <div className="hero-noise" aria-hidden="true"></div>
       <div className="hero-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
       <div className="hero-content">
@@ -329,6 +358,7 @@ function App() {
     return () => observer.disconnect()
   }, [])
   return <>
+    <PageLoader />
     <Header />
     <main>
       <Hero />
