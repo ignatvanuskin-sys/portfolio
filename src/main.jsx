@@ -235,30 +235,6 @@ function Marquee() {
   return <div className="marquee" aria-hidden="true"><div className="marquee-track">{[...items, ...items].map((item, index) => <span key={`${item}-${index}`}>{item}<i>✳</i></span>)}</div></div>
 }
 
-function DemoVisual({ variant }) {
-  if (variant === 'salon') return <div className="demo-visual demo-salon"><div className="demo-top"><b>● Abramenko Bot</b><small>online</small></div><p>Здравствуйте, Анастасия!<br /><strong>Выберите услугу:</strong></p><div className="demo-pills"><span className="active">Маникюр</span><span>Окрашивание</span><span>Стрижка</span></div><div className="demo-bottom">15:30 свободно <b>✓</b></div></div>
-  if (variant === 'search') return <div className="demo-visual demo-search"><div className="demo-top"><b>@searchbarbershop_bot</b><small>● live</small></div><div className="demo-searchbar">⌕ <span>Астана · Барбершоп</span><b>Найти</b></div><div className="demo-result"><b>«Бородач»</b><small>AI 82/100 · онлайн-запись: нет</small></div><div className="demo-bottom">100+ контактов за сессию <b>↗</b></div></div>
-  if (variant === 'market') return <div className="demo-visual demo-market"><div className="demo-top"><b>NIGHT MARKET</b><small>after dark</small></div><div className="demo-products"><span><i></i><b>Obsidian</b><small>талисман</small></span><span><i></i><b>Smoke</b><small>артефакт</small></span><span><i></i><b>Velvet</b><small>редкость</small></span></div><div className="demo-bottom">Objects for after dark <b>↗</b></div></div>
-  if (variant === 'arome') return <div className="demo-visual demo-arome"><div className="demo-top"><b>Maison d’Arôme</b><small>new collection</small></div><div className="demo-bottles"><span>NOIR<br /><small>fumé</small></span><span className="active">OUD<br /><small>& ambre</small></span><span>JARDIN<br /><small>blanc</small></span></div><div className="demo-bottom">16 500 ₽ <b>В корзину ↗</b></div></div>
-  if (variant === 'forma') return <div className="demo-visual demo-forma"><div className="demo-top"><b>NOVA FORMA</b><small>architecture</small></div><h4>Создаем пространства,<br /><em>которые остаются.</em></h4><div className="demo-stats"><span><b>12</b>лет</span><span><b>86</b>проектов</span><span><b>5</b>гарантия</span></div><div className="demo-bottom">Обсудить проект <b>↗</b></div></div>
-  if (variant === 'forge') return <div className="demo-visual demo-forge"><div className="demo-top"><b>FORGE ATELIER</b><small>The Living Horizon</small></div><h4>A collection of homes,<br /><em>shaped around light.</em></h4><div className="demo-bottom">Алматы · 24 резиденции <b>↗</b></div></div>
-  return <div className="demo-visual demo-email"><div className="demo-top"><b>✉ Email Studio</b><small>live · railway</small></div><div className="demo-mail-stats"><span><b>42%</b>open rate</span><span><b>18%</b>click rate</span><span><b>+31</b>new leads</span></div><div className="demo-flow">Новый подписчик <i>→</i> Welcome <i>→</i> Акция</div><div className="demo-bottom">12 шаблонов · 3 цепочки <b>↗</b></div></div>
-}
-
-function DemoReel({ onOpen }) {
-  return (
-    <section className="demo-section section-dark" aria-labelledby="demo-title">
-      <div className="section-label">00 / DEMO REEL</div>
-      <div className="demo-heading"><h2 id="demo-title">Вместо YouTube —<br /><em>живые продукты.</em></h2><p>Никаких чужих роликов и случайных ссылок. Здесь можно быстро увидеть, как выглядят реальные решения: наведи, выбери кейс, открой подробности.</p></div>
-      <div className="demo-rail">
-        {cases.slice(0, 4).map((item, index) => <button className="demo-card" key={item.title} onClick={() => onOpen(item)} aria-label={`Открыть демо ${item.title}`} {...HoverProps()}>
-          <div className="demo-card-number">0{index + 1}</div><DemoVisual variant={item.visual} /><div className="demo-card-caption"><b>{item.title}</b><span>{item.type.split(' · ')[0]} <Arrow /></span></div>
-        </button>)}
-      </div>
-    </section>
-  )
-}
-
 function Skills() {
   const skills = [
     ['Web Design & Development', 'Сайты с интерактивными анимациями, адаптивным дизайном и JavaScript-функционалом. От лендинга до e-commerce.'],
@@ -268,11 +244,16 @@ function Skills() {
   return <section className="paper-section skills-section" id="skills"><div className="section-label">01 / НАВЫКИ</div><div className="paper-heading"><h2>Не просто код.<br /><em>Рабочий результат.</em></h2><p>Три направления, в которых я соединяю дизайн, разработку и задачу бизнеса в один готовый продукт.</p></div><div className="skill-list">{skills.map(([name, description], index) => <article className="skill-row" key={name}><span className="skill-index">0{index + 1}</span><h3>{name}</h3><p>{description}</p><Arrow /></article>)}</div></section>
 }
 
+function ProjectArt({ variant }) {
+  const labels = { salon: '✦', search: '⌕', market: '◒', arome: '◉', forma: '⌂', forge: '◌', email: '✉' }
+  return <div className={`project-art project-art-${variant}`} aria-hidden="true"><span className="art-halo"></span><b>{labels[variant] || '✦'}</b><i></i></div>
+}
+
 function ProjectCard({ item, index, onOpen }) {
   const [ref, visible] = useReveal()
   return <button ref={ref} className={`work-card ${visible ? 'is-visible' : ''}`} style={{ '--delay': `${index * 70}ms` }} onClick={() => onOpen(item)} {...HoverProps()}>
     <div className="work-card-top"><span>0{index + 1} / {item.type}</span><span>{item.metric}</span></div>
-    <div className="work-card-main"><div><h3>{item.title}</h3><p>{item.task}</p><small>{item.handle}</small></div><div className={`work-preview preview-${item.visual}`}><DemoVisual variant={item.visual} /></div></div>
+    <div className="work-card-main"><div className="work-copy"><h3>{item.title}</h3><p>{item.task}</p><small>{item.handle}</small><span className="work-card-link">Открыть <Arrow /></span></div><ProjectArt variant={item.visual} /></div>
     <div className="work-card-bottom"><span>{item.stack}</span><span className="work-open">Смотреть кейс <Arrow /></span></div>
   </button>
 }
@@ -280,7 +261,7 @@ function ProjectCard({ item, index, onOpen }) {
 function Projects({ onOpen }) {
   const [filter, setFilter] = useState('work')
   const visibleCases = filter === 'work' ? cases.slice(0, 4) : cases.slice(4)
-  return <section className="work-section section-dark" id="work"><div className="section-label">02 / ИЗБРАННЫЕ ПРОЕКТЫ</div><div className="work-heading"><h2>Рабочие продукты.<br /><em>Не просто демо.</em></h2><p>Сохранил проекты и ссылки. Переключай подборки и открывай каждый кейс, чтобы увидеть задачу, решение и результат.</p></div><div className="work-tabs" role="tablist" aria-label="Фильтр проектов"><button className={filter === 'work' ? 'is-active' : ''} role="tab" aria-selected={filter === 'work'} onClick={() => setFilter('work')} {...HoverProps()}>Рабочие <b>{cases.slice(0, 4).length}</b></button><button className={filter === 'other' ? 'is-active' : ''} role="tab" aria-selected={filter === 'other'} onClick={() => setFilter('other')} {...HoverProps()}>Прочие <b>{cases.slice(4).length}</b></button></div><div className="work-list">{visibleCases.map((item, index) => <ProjectCard key={item.title} item={item} index={index} onOpen={onOpen} />)}</div></section>
+  return <section className="work-section section-dark paper-projects" id="work"><div className="section-label">02 / ИЗБРАННЫЕ ПРОЕКТЫ</div><div className="work-heading"><h2>Проекты</h2><p>Сохранил проекты и ссылки. Переключай подборки и открывай каждый кейс, чтобы увидеть задачу, решение и результат.</p></div><div className="work-tabs" role="tablist" aria-label="Фильтр проектов"><button className={filter === 'work' ? 'is-active' : ''} role="tab" aria-selected={filter === 'work'} onClick={() => setFilter('work')} {...HoverProps()}>Рабочие <b>{cases.slice(0, 4).length}</b></button><button className={filter === 'other' ? 'is-active' : ''} role="tab" aria-selected={filter === 'other'} onClick={() => setFilter('other')} {...HoverProps()}>Прочие <b>{cases.slice(4).length}</b></button></div><div className="work-list">{visibleCases.map((item, index) => <ProjectCard key={item.title} item={item} index={index} onOpen={onOpen} />)}</div></section>
 }
 
 function Services() {
@@ -368,7 +349,6 @@ function App() {
     <main>
       <Hero />
       <Marquee />
-      <DemoReel onOpen={setActive} />
       <Skills />
       <Projects onOpen={setActive} />
       <Services />
