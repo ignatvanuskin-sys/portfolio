@@ -226,6 +226,7 @@ function Hero() {
           <div className="hero-actions"><a className="solid-btn" href="#contact" {...HoverProps()}>Обсудить задачу <Arrow /></a><span className="scroll-note">scroll to explore <b>↓</b></span></div>
         </div>
       </div>
+      <div className="hero-signal" aria-label="Статус студии"><div className="signal-top"><span>LIVE SYSTEM</span><i></i></div><strong>07</strong><span>digital products<br />in the field</span><div className="signal-line"><b></b></div><small>DESIGN / BUILD / SHIP</small></div>
     </section>
   )
 }
@@ -246,7 +247,7 @@ function Skills() {
 
 function ProjectArt({ variant }) {
   const labels = { salon: '✦', search: '⌕', market: '◒', arome: '◉', forma: '⌂', forge: '◌', email: '✉' }
-  return <div className={`project-art project-art-${variant}`} aria-hidden="true"><span className="art-halo"></span><b>{labels[variant] || '✦'}</b><i></i></div>
+  return <div className={`project-art project-art-${variant}`} aria-hidden="true"><span className="art-halo"></span><span className="art-sweep"></span><span className="art-particle particle-one"></span><span className="art-particle particle-two"></span><b>{labels[variant] || '✦'}</b><i></i></div>
 }
 
 function ProjectCard({ item, index, onOpen }) {
