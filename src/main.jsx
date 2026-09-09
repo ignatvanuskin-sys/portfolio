@@ -6,6 +6,20 @@ const TELEGRAM_URL = 'https://t.me/EloQuncy'
 
 const cases = [
   {
+    title: 'BuildScope AI × ARQA HOUSE',
+    type: 'Платформа · Автоматизация продаж строительства',
+    subtitle: 'Construction Sales Automation Platform · концепт-кейс',
+    handle: 'auto-stroy-production.up.railway.app',
+    link: 'https://auto-stroy-production.up.railway.app/',
+    task: 'Застройщик получал 150–200 заявок в месяц без единой сборки: расчёт и коммерческие предложения делались вручную, follow-up забывались, а менеджеры тратили время на холодные лиды.',
+    role: 'Продуктовая архитектура · AI-модуль квалификации · Приёмка · Координация AI coding agent',
+    solution: 'Единая система: публичный сайт ARQA HOUSE с 6-шаговым калькулятором, детерминированный движок цены, AI-квалификация заметок со строгой JSON-схемой, Lead Score 0–100, PDF-КП, CRM с Kanban-воронкой, Telegram-уведомления, follow-up на 1/3/7 день и аналитика. AI не считает деньги: при сбое работает rule-based fallback.',
+    metric: '53 демо-лида · 81 автотест',
+    proof: 'Концепт-кейс · прод на Railway · CI/CD · 0 critical/high',
+    stack: 'React 19 · Express/tRPC · MySQL/Drizzle · Groq · Railway',
+    visual: 'buildscope',
+  },
+  {
     title: 'Abramenko Studio',
     type: 'Telegram-бот · Салон красоты',
     handle: '@abramenko_test_bot',
@@ -270,7 +284,7 @@ function Skills() {
 }
 
 function ProjectArt({ variant }) {
-  const labels = { salon: '✦', search: '⌕', market: '◒', arome: '◉', forma: '⌂', forge: '◌', email: '✉' }
+  const labels = { buildscope: '◈', salon: '✦', search: '⌕', market: '◒', arome: '◉', forma: '⌂', forge: '◌', email: '✉' }
   return <div className={`project-art project-art-${variant}`} aria-hidden="true"><span className="art-halo"></span><span className="art-sweep"></span><span className="art-particle particle-one"></span><span className="art-particle particle-two"></span><b>{labels[variant] || '✦'}</b><i></i></div>
 }
 
@@ -278,15 +292,15 @@ function ProjectCard({ item, index, onOpen }) {
   const [ref, visible] = useReveal()
   return <button ref={ref} className={`work-card ${visible ? 'is-visible' : ''}`} style={{ '--delay': `${index * 70}ms` }} onClick={() => onOpen(item)} {...HoverProps()}>
     <div className="work-card-top"><span>0{index + 1} / {item.type}</span><span>{item.metric}</span></div>
-    <div className="work-card-main"><div className="work-copy"><h3>{item.title}</h3><p>{item.task}</p><small>{item.handle}</small><span className="work-card-link">Открыть <Arrow /></span></div><ProjectArt variant={item.visual} /></div>
+    <div className="work-card-main"><div className="work-copy"><h3>{item.title}</h3>{item.subtitle && <p className="project-subtitle">{item.subtitle}</p>}<p>{item.task}</p><small>{item.handle}</small><span className="work-card-link">Открыть <Arrow /></span></div><ProjectArt variant={item.visual} /></div>
     <div className="work-card-bottom"><span>{item.stack}</span><span className="work-open">Смотреть кейс <Arrow /></span></div>
   </button>
 }
 
 function Projects({ onOpen }) {
   const [filter, setFilter] = useState('work')
-  const visibleCases = filter === 'work' ? cases.slice(0, 4) : cases.slice(4)
-  return <section className="work-section section-dark paper-projects" id="work"><div className="section-label">02 / ИЗБРАННЫЕ ПРОЕКТЫ</div><div className="work-heading"><h2>Проекты</h2><p>Сохранил проекты и ссылки. Переключай подборки и открывай каждый кейс, чтобы увидеть задачу, решение и результат.</p></div><div className="work-tabs" role="tablist" aria-label="Фильтр проектов"><button className={filter === 'work' ? 'is-active' : ''} role="tab" aria-selected={filter === 'work'} onClick={() => setFilter('work')} {...HoverProps()}>Рабочие <b>{cases.slice(0, 4).length}</b></button><button className={filter === 'other' ? 'is-active' : ''} role="tab" aria-selected={filter === 'other'} onClick={() => setFilter('other')} {...HoverProps()}>Прочие <b>{cases.slice(4).length}</b></button></div><div className="work-list">{visibleCases.map((item, index) => <ProjectCard key={item.title} item={item} index={index} onOpen={onOpen} />)}</div></section>
+  const visibleCases = filter === 'work' ? cases.slice(0, 5) : cases.slice(5)
+  return <section className="work-section section-dark paper-projects" id="work"><div className="section-label">02 / ИЗБРАННЫЕ ПРОЕКТЫ</div><div className="work-heading"><h2>Проекты</h2><p>Сохранил проекты и ссылки. Переключай подборки и открывай каждый кейс, чтобы увидеть задачу, решение и результат.</p></div><div className="work-tabs" role="tablist" aria-label="Фильтр проектов"><button className={filter === 'work' ? 'is-active' : ''} role="tab" aria-selected={filter === 'work'} onClick={() => setFilter('work')} {...HoverProps()}>Рабочие <b>{cases.slice(0, 5).length}</b></button><button className={filter === 'other' ? 'is-active' : ''} role="tab" aria-selected={filter === 'other'} onClick={() => setFilter('other')} {...HoverProps()}>Прочие <b>{cases.slice(5).length}</b></button></div><div className="work-list">{visibleCases.map((item, index) => <ProjectCard key={item.title} item={item} index={index} onOpen={onOpen} />)}</div></section>
 }
 
 function Services() {

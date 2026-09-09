@@ -278,6 +278,7 @@ main > section:not(.hero) { content-visibility: auto; contain-intrinsic-size: 90
 .paper-projects .work-card-main { min-height: 245px; grid-template-columns: minmax(0, 1fr) minmax(300px, .82fr); gap: 8%; padding: 24px 0 30px; }
 .paper-projects .work-card h3 { color: var(--ink-dark); font-size: clamp(25px, 3.6vw, 54px); }
 .paper-projects .work-card p { color: rgba(17,17,16,.52); }
+.paper-projects .work-card p.project-subtitle { margin-bottom: 10px; color: rgba(17,17,16,.78); font-weight: 700; letter-spacing: -.02em; }
 .paper-projects .work-card small { color: rgba(17,17,16,.45); }
 .paper-projects .work-card-bottom { border-top-color: rgba(17,17,16,.1); }
 .paper-projects .work-open, .paper-projects .work-card-link { color: var(--ink-dark); }
@@ -307,6 +308,10 @@ main > section:not(.hero) { content-visibility: auto; contain-intrinsic-size: 90
 .project-art-forge b { border-radius: 50%; border-width: 4px; }
 .project-art-email { background: linear-gradient(135deg, #eceff2, #d9dee5); }
 .project-art-email b { border-radius: 12px; border-width: 4px; transform: rotate(0); }
+.project-art-buildscope { background: radial-gradient(circle at 72% 28%, rgba(216,255,93,.5), transparent 23%), linear-gradient(135deg, #dfe6df, #bdc9c1); }
+.project-art-buildscope::before { inset: 9%; border-radius: 30px; transform: rotate(-8deg) scale(.88); border-color: rgba(17,17,16,.2); }
+.project-art-buildscope b { width: 118px; height: 78px; border-radius: 16px; border-width: 5px; transform: rotate(-7deg); font-size: 49px; }
+.project-art-buildscope i { width: 230px; height: 230px; background: radial-gradient(circle at 32% 26%, #faffea, rgba(216,255,93,.5) 22%, rgba(17,17,16,.15) 67%, transparent 70%); }
 @keyframes art-float { 50% { transform: translate3d(8px, -9px, 0) scale(1.04); } }
 @keyframes art-ring { to { transform: rotate(342deg) scaleX(.62); } }
 @keyframes metal-shine { to { transform: rotate(360deg); } }
