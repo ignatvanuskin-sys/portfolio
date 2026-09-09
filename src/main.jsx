@@ -292,7 +292,7 @@ function ProjectCard({ item, index, onOpen }) {
   const [ref, visible] = useReveal()
   return <button ref={ref} className={`work-card ${visible ? 'is-visible' : ''}`} style={{ '--delay': `${index * 70}ms` }} onClick={() => onOpen(item)} {...HoverProps()}>
     <div className="work-card-top"><span>0{index + 1} / {item.type}</span><span>{item.metric}</span></div>
-    <div className="work-card-main"><div className="work-copy"><h3>{item.title}</h3>{item.subtitle && <p className="project-subtitle">{item.subtitle}</p>}<p>{item.task}</p><small>{item.handle}</small><span className="work-card-link">Открыть <Arrow /></span></div><ProjectArt variant={item.visual} /></div>
+    <div className="work-card-main"><div className="work-copy"><h3>{item.title}</h3>{item.subtitle && <p className="project-subtitle">{item.subtitle}</p>}<p>{item.task}</p><span className="work-card-link">Открыть <Arrow /></span></div><ProjectArt variant={item.visual} /></div>
     <div className="work-card-bottom"><span>{item.stack}</span><span className="work-open">Смотреть кейс <Arrow /></span></div>
   </button>
 }
