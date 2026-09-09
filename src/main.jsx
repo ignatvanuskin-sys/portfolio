@@ -120,7 +120,7 @@ function useReveal() {
   return [ref, visible]
 }
 
-const hoverAudio = { context: null, unlocked: false }
+const hoverAudio = { context: null, unlocked: false, enabled: true, lastHover: 0 }
 
 function unlockHoverAudio() {
   if (!hoverAudio.context) {
@@ -134,8 +134,10 @@ function unlockHoverAudio() {
 
 function playHoverSound() {
   const context = hoverAudio.context
-  if (!hoverAudio.unlocked || !context || context.state !== 'running') return
+  if (!hoverAudio.enabled || !hoverAudio.unlocked || !context || context.state !== 'running') return
   const now = context.currentTime
+  if (now - hoverAudio.lastHover < .07 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  hoverAudio.lastHover = now
   const oscillator = context.createOscillator()
   const gain = context.createGain()
   oscillator.type = 'sine'
@@ -147,6 +149,23 @@ function playHoverSound() {
   oscillator.connect(gain).connect(context.destination)
   oscillator.start(now)
   oscillator.stop(now + .08)
+}
+
+function playClickSound() {
+  const context = hoverAudio.context
+  if (!hoverAudio.enabled || !hoverAudio.unlocked || !context || context.state !== 'running' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const now = context.currentTime
+  const oscillator = context.createOscillator()
+  const gain = context.createGain()
+  oscillator.type = 'triangle'
+  oscillator.frequency.setValueAtTime(260, now)
+  oscillator.frequency.exponentialRampToValueAtTime(130, now + .12)
+  gain.gain.setValueAtTime(.0001, now)
+  gain.gain.exponentialRampToValueAtTime(.04, now + .01)
+  gain.gain.exponentialRampToValueAtTime(.0001, now + .13)
+  oscillator.connect(gain).connect(context.destination)
+  oscillator.start(now)
+  oscillator.stop(now + .14)
 }
 
 function PageLoader() {
@@ -190,7 +209,15 @@ function Arrow() {
 
 function Header() {
   const [open, setOpen] = useState(false)
+  const [soundOn, setSoundOn] = useState(() => window.localStorage.getItem('eloquncy-sound') !== 'off')
+  useEffect(() => { hoverAudio.enabled = soundOn }, [soundOn])
   const links = [['#work', 'Проекты'], ['#skills', 'Навыки'], ['#process', 'Процесс'], ['#contact', 'Контакты']]
+  const toggleSound = () => {
+    unlockHoverAudio()
+    hoverAudio.enabled = !hoverAudio.enabled
+    setSoundOn(hoverAudio.enabled)
+    window.localStorage.setItem('eloquncy-sound', hoverAudio.enabled ? 'on' : 'off')
+  }
   return (
     <header className="site-header">
       <a className="brand" href="#top" onClick={() => setOpen(false)} aria-label="EloQuncy — на главную">
@@ -200,6 +227,7 @@ function Header() {
       <nav className="desktop-nav" aria-label="Основная навигация">
         {links.map(([href, label]) => <a key={href} href={href} {...HoverProps()}>{label}</a>)}
       </nav>
+      <button className={`sound-toggle ${soundOn ? 'is-on' : ''}`} type="button" aria-pressed={soundOn} onClick={toggleSound} {...HoverProps()}><span className="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span><span>{soundOn ? 'Звук' : 'Тихо'}</span></button>
       <a className="header-cta" href="#contact" {...HoverProps()}>Обсудить проект <Arrow /></a>
       <button className="mobile-toggle" type="button" aria-expanded={open} onClick={() => setOpen(value => !value)}>
         <span>{open ? 'Закрыть' : 'Меню'}</span><i aria-hidden="true"><b></b><b></b></i>
@@ -343,6 +371,13 @@ function App() {
     }), { threshold: .14 })
     sections.forEach(section => observer.observe(section))
     return () => observer.disconnect()
+  }, [])
+  useEffect(() => {
+    const clickSound = event => {
+      if (event.target.closest('a, button, summary')) playClickSound()
+    }
+    document.addEventListener('click', clickSound)
+    return () => document.removeEventListener('click', clickSound)
   }, [])
   return <>
     <PageLoader />

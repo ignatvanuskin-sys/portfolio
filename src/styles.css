@@ -67,6 +67,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .desktop-nav a, .header-cta { color: var(--muted); font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: color .25s var(--ease); }
 .desktop-nav a:hover, .header-cta:hover { color: var(--acid); }
 .header-cta { display: inline-flex; align-items: center; gap: 10px; padding: 10px 15px; border: 1px solid var(--line); border-radius: 99em; }
+.sound-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 99em; background: rgba(0,0,0,.18); color: var(--faint); cursor: pointer; font: 500 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; transition: color .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease); }
+.sound-toggle:hover, .sound-toggle:focus-visible { border-color: var(--acid); color: var(--acid); transform: translateY(-2px); }
+.sound-toggle.is-on .sound-bars i { background: var(--acid); box-shadow: 0 0 8px rgba(216,255,93,.45); animation: sound-wave .75s ease-in-out infinite alternate; }
+.sound-bars { display: inline-flex; align-items: center; gap: 2px; height: 13px; }
+.sound-bars i { display: block; width: 2px; height: 5px; border-radius: 2px; background: var(--faint); transition: background .2s, box-shadow .2s; }
+.sound-bars i:nth-child(2) { height: 11px; animation-delay: .15s; }
+.sound-bars i:nth-child(3) { height: 7px; animation-delay: .3s; }
+@keyframes sound-wave { to { transform: scaleY(.45); } }
 .arrow { display: inline-block; font: 400 1.2em/1 var(--body); transition: transform .35s var(--ease); }
 a:hover .arrow, button:hover .arrow { transform: translate(4px, -4px); }
 .mobile-toggle, .mobile-nav { display: none; }
